@@ -41,13 +41,13 @@ export default class Convert {
 
     const resultArray = await Promise.all(
       logsArray.map(async log => {
-        const datetime = await this.getDatetime(log).catch(err => {
+        const timestamp = await this.getTimestamp(log).catch(err => {
           throw err
         })
         const email = this.getEmail(log)
 
-        if (datetime && email) {
-          return [datetime, email]
+        if (timestamp && email) {
+          return [timestamp, email]
         }
 
         return null
@@ -55,7 +55,7 @@ export default class Convert {
     ).catch(err => {
       throw err
     })
-    resultArray.unshift(['datetime', 'email'])
+    resultArray.unshift(['timestamp', 'email'])
 
     return csvStringify(resultArray)
   }
