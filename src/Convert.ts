@@ -8,9 +8,7 @@ export default class Convert {
     const seconds = parseInt(tai64n.slice(2, 17), 16) - 10
     const milliseconds = (parseInt(tai64n.slice(17, 25), 16) * 0.000000001).toFixed(3).toString().split('.')[1]
 
-    const unixtime = Number(`${seconds}${milliseconds}`)
-    const timestamp = new Date(unixtime).toISOString()
-
+    const timestamp = new Date(Number(`${seconds}${milliseconds}`)).toISOString()
     return timestamp
   }
 
