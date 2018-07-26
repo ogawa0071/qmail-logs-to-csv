@@ -14,17 +14,17 @@ export default class Convert {
     return timestamp
   }
 
-  async getDatetime(log: string) {
+  async getTimestamp(log: string) {
     const tai64n = log.match(/^(@.+?)(\s)/)
 
     if (!tai64n || !tai64n[1]) {
       return null
     }
 
-    const datetime = await this.time(tai64n[1]).catch(err => {
+    const timestamp = await this.time(tai64n[1]).catch(err => {
       throw err
     })
-    return datetime
+    return timestamp
   }
 
   getEmail(log: string) {
