@@ -24,14 +24,16 @@ export default class Convert {
       return null
     }
 
-    const datetime = await this.time(tai64n[1])
+    const datetime = await this.time(tai64n[1]).catch(err => {
+      throw err
+    })
     return datetime
   }
 
   getEmail(log: string) {
     const result = log.match(/(to\slocal)(\s)(.+)$/)
 
-    if (!result) {
+    if (!result || !result[3]) {
       return null
     }
 
@@ -44,7 +46,9 @@ export default class Convert {
 
     const resultArray = await Promise.all(
       logsArray.map(async log => {
-        const datetime = await this.getDatetime(log)
+        const datetime = await this.getDatetime(log).catch(err => {
+          throw err
+        })
         const email = this.getEmail(log)
 
         if (datetime && email) {
@@ -53,7 +57,9 @@ export default class Convert {
 
         return null
       })
-    )
+    ).catch(err => {
+      throw err
+    })
     resultArray.unshift(['datetime', 'email'])
 
     return csvStringify(resultArray)
