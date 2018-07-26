@@ -1,10 +1,5 @@
-import * as csv from 'csv'
-import * as util from 'util'
-
-const csvStringify = util.promisify(csv.stringify)
-
 export default class Convert {
-  async time(tai64n: string) {
+  time(tai64n: string) {
     const seconds = parseInt(tai64n.slice(2, 17), 16) - 10
     const milliseconds = (parseInt(tai64n.slice(17, 25), 16) * 0.000000001).toFixed(3).toString().split('.')[1]
 
@@ -12,51 +7,35 @@ export default class Convert {
     return timestamp
   }
 
-  async getTimestamp(log: string) {
+  getTimestamp(log: string) {
     const tai64n = log.match(/^(@.+?)(\s)/)
 
     if (!tai64n || !tai64n[1]) {
       return null
     }
 
-    const timestamp = await this.time(tai64n[1]).catch(err => {
-      throw err
-    })
+    const timestamp = this.time(tai64n[1])
     return timestamp
   }
 
   getEmail(log: string) {
-    const result = log.match(/(to\slocal)(\s)(.+)$/)
+    const email = log.match(/(to\slocal)(\s)(.+)$/)
 
-    if (!result || !result[3]) {
+    if (!email || !email[3]) {
       return null
     }
 
-    return result[3]
+    return email[3]
   }
 
-  async logs(logsBuffer: Buffer) {
-    const logs = logsBuffer.toString()
-    const logsArray = logs.split(/\n/)
+  logLine(log: string) {
+    const timestamp = this.getTimestamp(log)
+    const email = this.getEmail(log)
 
-    const resultArray = await Promise.all(
-      logsArray.map(async log => {
-        const timestamp = await this.getTimestamp(log).catch(err => {
-          throw err
-        })
-        const email = this.getEmail(log)
+    if (!timestamp || !email) {
+      return null
+    }
 
-        if (timestamp && email) {
-          return [timestamp, email]
-        }
-
-        return null
-      })
-    ).catch(err => {
-      throw err
-    })
-    resultArray.unshift(['timestamp', 'email'])
-
-    return csvStringify(resultArray)
+    return `${timestamp},${email}`
   }
 }
