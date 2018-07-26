@@ -55,7 +55,7 @@ class QmailLogsToCsv extends Command {
       })
 
       const filesBuffer = await Promise.all(files.map(async file => {
-        const filePath = path.join(__dirname, args.path, file)
+        const filePath = path.join(process.cwd(), args.path, file)
         const fileBuffer = await fsReadFile(filePath).catch(() => {
           throw new Error(`Can't read file: ${filePath}`)
         })
