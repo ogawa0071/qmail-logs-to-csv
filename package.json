@@ -45,7 +45,7 @@
   },
   "repository": "ogawa0071/qmail-logs-to-csv",
   "scripts": {
-    "posttest": "tsc -p test --noEmit && tslint -p test -t stylish",
+    "posttest": "tsc -p test --noEmit && tslint -p test -t stylish --fix",
     "prepack": "rm -rf lib && tsc",
     "prepare": "rm -rf lib && tsc",
     "test": "nyc mocha --forbid-only \"test/**/*.test.ts\""
