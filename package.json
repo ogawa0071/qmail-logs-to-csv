@@ -1,7 +1,7 @@
 {
   "name": "qmail-logs-to-csv",
   "description": "qmail logs to csv",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "Futa Ogawa @ogawa0071",
   "bin": {
     "qmail-logs-to-csv": "./bin/run"
