@@ -39,7 +39,7 @@ class QmailLogsToCsv extends Command {
       }
     })
     rl.on('close', () => {
-      this.log('Complete!')
+      this.log('\n')
     })
   }
 }
